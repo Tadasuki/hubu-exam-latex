@@ -1,0 +1,276 @@
+% !TeX root = exam_template.tex
+% ==========================================
+% 湖北大学课程考试试题纸 - 排版与样式配置
+% ==========================================
+
+\usepackage{iftex}
+\ifXeTeX\else
+  \errmessage{This template must be compiled with XeLaTeX}
+\fi
+
+% 第二页起的基础 geometry（\restoregeometry 会恢复到此设定）
+% 文字在非首页框线内居中：框线左15mm/右9mm，文字左23mm/右17mm，各留8mm
+\usepackage[
+  paperwidth=210mm,
+  paperheight=297mm,
+  left=23mm,
+  right=17mm,
+  top=20mm,
+  bottom=30mm
+]{geometry}
+\usepackage{afterpage}
+\usepackage{fix-cm}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{array,tabularx}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{eso-pic}
+\usepackage{lastpage}
+
+\pagestyle{empty}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+
+% 首页/后续页 样式切换标记
+\newif\iflaterpages\laterpagesfalse
+\newlength{\questionslm}
+\setlength{\questionslm}{2.2em}
+\renewcommand{\arraystretch}{1.25}
+\defaultfontfeatures{Ligatures=TeX}
+
+% CJK/西文字体配置
+\setmainfont[
+  BoldFont=lmroman12-bold.otf,
+  ItalicFont=lmroman12-italic.otf,
+  BoldItalicFont=lmroman10-bolditalic.otf
+]{lmroman12-regular.otf}
+\setsansfont[
+  BoldFont=lmsans10-bold.otf
+]{lmsans10-regular.otf}
+\setmonofont[
+  ItalicFont=lmmono10-italic.otf
+]{lmmono10-regular.otf}
+\setCJKmainfont[
+  Path=font/,
+  BoldFont=AdobeHeitiStd-Regular.otf
+]{AdobeSongStd-Light.otf}
+\newCJKfontfamily\adobesong[
+  Path=font/
+]{AdobeSongStd-Light.otf}
+\newCJKfontfamily\adobesongbold[
+  Path=font/,
+  FakeBold=2.2
+]{AdobeSongStd-Light.otf}
+\newCJKfontfamily\zhongsong[
+  Path=font/
+]{华文中宋.ttf}
+\newCJKfontfamily\adobehei[
+  Path=font/
+]{AdobeHeitiStd-Regular.otf}
+\newCJKfontfamily\adobekai[
+  Path=font/,
+  FakeBold=2.2
+]{AdobeKaitiStd-Regular.otf}
+% 页面框线与密封线配置
+% 首页左右距离
+\newcommand{\OfficialFrameLeft}{32mm}
+\newcommand{\OfficialFrameRight}{9mm}
+% 非首页左右距离
+\newcommand{\LaterFrameLeft}{25mm}
+\newcommand{\LaterFrameRight}{9mm}
+% 上下距离
+\newcommand{\OfficialFrameTop}{7mm}
+\newcommand{\OfficialFrameBottom}{7mm}
+
+
+
+\newcommand{\drawsealstars}{%
+  \begin{scope}[font=\adobesong\fontsize{12}{12}\selectfont,text=black!78]
+    \foreach \x in {7,13,19,25} {
+      \foreach \y in {9,16,...,64} {
+        \node at (\x mm,-\y mm) {*};
+      }
+      \foreach \y in {226,233,...,288} {
+        \node at (\x mm,-\y mm) {*};
+      }
+    }
+    \foreach \x in {13,25} {
+      \foreach \y in {72,79,...,142} {
+        \node at (\x mm,-\y mm) {*};
+      }
+      \foreach \y in {150,157,...,220} {
+        \node at (\x mm,-\y mm) {*};
+      }
+    }
+  \end{scope}
+}
+
+\newcommand{\drawfirstpageseal}{%
+  \begin{scope}[shift={(current page.north west)}]
+    \drawsealstars
+    \draw[line width=0.55pt] (9.6mm,-70mm) -- (9.6mm,-116mm);
+    \draw[line width=0.55pt] (21.6mm,-70mm) -- (21.6mm,-116mm);
+    \draw[line width=0.55pt] (9.6mm,-152mm) -- (9.6mm,-209mm);
+    \draw[line width=0.55pt] (21.6mm,-152mm) -- (21.6mm,-209mm);
+    \node[rotate=90,font=\adobesong\fontsize{12}{15}\selectfont] at (7.4mm,-133mm)
+      {姓\quad 名：};
+    \node[rotate=90,font=\adobesong\fontsize{12}{15}\selectfont] at (19.2mm,-133mm)
+      {专 业 年 级：};
+    \node[rotate=90,font=\adobesong\fontsize{12}{15}\selectfont] at (7.4mm,-224mm)
+      {学\quad 号：};
+    \node[rotate=90,font=\adobesong\fontsize{12}{15}\selectfont] at (19.2mm,-224mm)
+      {学\quad 院：};
+  \end{scope}
+}
+
+\newcommand{\drawofficialframe}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \ifnum\value{page}=1\relax
+      \draw[line width=0.45pt]
+        ([xshift=\OfficialFrameLeft,yshift=-\OfficialFrameTop]current page.north west)
+        rectangle
+        ([xshift=-\OfficialFrameRight,yshift=\OfficialFrameBottom]current page.south east);
+    \else
+      \draw[line width=0.45pt]
+        ([xshift=\LaterFrameLeft,yshift=-\OfficialFrameTop]current page.north west)
+        rectangle
+        ([xshift=-\LaterFrameRight,yshift=\OfficialFrameBottom]current page.south east);
+    \fi
+    \node[font=\adobesongbold\fontsize{11}{13}\selectfont]
+      at ([yshift=11mm]current page.south)
+      {第\ \thepage\ 页\qquad 共\ \pageref{LastPage}\ 页};
+    \ifnum\value{page}=1\relax
+      \drawfirstpageseal
+    \fi
+  \end{tikzpicture}%
+}
+\AddToShipoutPictureBG{\drawofficialframe}
+
+% 填空下划线宏定义 (使用 [c] 使文字在下划线上居中显示)
+\newcommand{\linefield}[2]{%
+  \underline{\makebox[#1][c]{\adobesong #2}}%
+}
+
+\newcommand{\officialheader}{%
+  \noindent{\adobesongbold\fontsize{13}{16}\selectfont\color{black!58}
+  \makebox[\linewidth]{%
+    \makebox[35mm][l]{湖北大学 \SchoolYear}%
+    \makebox[70mm][c]{学年度第\ \Semester\ 学期课程考试}%
+    \makebox[10mm][r]{试题纸}%
+  }}\par
+}
+
+\newcommand{\officialtitle}{%
+  \vspace{6mm}
+  \noindent\makebox[\linewidth][c]{%
+    \raisebox{-0.28\height}{\includegraphics[height=18.5mm]{1.png}}%
+    \hspace{4.8mm}%
+    {\adobekai\fontsize{25}{31}\selectfont 课程考试试题纸}%
+  }\par
+}
+
+\newcommand{\officialinfo}{%
+  \vspace{9mm}
+  \noindent
+  \begin{tabularx}{\linewidth}{@{}>{\zhongsong\fontsize{13}{16}\selectfont}m{25mm}X>{\centering\arraybackslash\zhongsong\fontsize{13}{16}\selectfont}m{37mm}@{}}
+    课程名称： & \linefield{\hsize}{\CourseName} & （\ \PaperType\quad 卷\ ）\\[3.5mm]
+  \end{tabularx}
+  \noindent
+  \begin{tabularx}{\linewidth}{@{}>{\zhongsong\fontsize{13}{16}\selectfont}m{25mm}m{27mm}>{\centering\arraybackslash\zhongsong\fontsize{13}{16}\selectfont}m{34mm}>{\zhongsong\fontsize{13}{16}\selectfont}m{28mm}X@{}}
+    考试方式： & \linefield{24mm}{} & （\ExamMode） & 印刷份数： & \linefield{\hsize}{\PrintCopies}\\[3.5mm]
+    学\qquad 院： & \multicolumn{2}{l}{\linefield{55mm}{\CollegeName}} & 任课教师： & \linefield{\hsize}{\TeacherName}\\[3.5mm]
+  \end{tabularx}
+  \noindent
+  \begin{tabularx}{\linewidth}{@{}>{\zhongsong\fontsize{13}{16}\selectfont}m{25mm}X@{}}
+    专业年级： & \linefield{\hsize}{\MajorGrade}\\
+  \end{tabularx}\par
+}
+
+\newcommand{\twolinecell}[2]{%
+  \begin{tabular}[c]{@{}c@{}}#1\\[-0.5mm]#2\end{tabular}%
+}
+
+\newcommand{\scoretable}{%
+  \vspace{10mm}
+  \noindent{\setlength{\arrayrulewidth}{0.45pt}
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabularx}{\linewidth}{|>{\centering\arraybackslash\zhongsong\fontsize{13}{15}\selectfont}m{9mm}|*{8}{>{\centering\arraybackslash\zhongsong\fontsize{13}{15}\selectfont}X|}>{\centering\arraybackslash\zhongsong\fontsize{13}{15}\selectfont}m{13mm}|>{\centering\arraybackslash\zhongsong\fontsize{12}{15}\selectfont}m{16mm}|}
+    \hline
+    \rule[-4.1mm]{0pt}{13.8mm}\twolinecell{题}{号} & 一 & 二 & 三 & 四 & 五 & 六 & 七 & 八 & 总分 & \twolinecell{阅卷}{教师}\\ \hline
+    \rule[-4.1mm]{0pt}{13.8mm}\twolinecell{得}{分} & & & & & & & & & & \\ \hline
+  \end{tabularx}}\par
+}
+
+\newcommand{\dottedseparator}{%
+  \vspace{2mm}
+  \noindent\tikz{\draw[line width=0.9pt,dotted,dash pattern=on 0.7pt off 2.3pt] (0,0) -- (\linewidth,0);}
+  \par\vspace{2.5mm}
+}
+
+\newcommand{\sectionscorebox}{%
+  {\setlength{\arrayrulewidth}{0.45pt}
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{|>{\centering\arraybackslash\zhongsong\fontsize{13}{15}\selectfont}m{9mm}|m{14mm}|}
+    \hline
+    \rule[-4.1mm]{0pt}{13.8mm}\twolinecell{得}{分} & \\ \hline
+  \end{tabular}}%
+}
+
+\newcommand{\smallscorebox}{%
+  \noindent\sectionscorebox\par
+  \vspace{5mm}
+}
+
+\newcommand{\officialfrontmatter}{%
+  \begingroup
+  \hfuzz=6pt
+  \officialheader
+  \officialtitle
+  \officialinfo
+  \scoretable
+  \dottedseparator
+  \endgroup
+}
+
+\newcommand{\examsection}[1]{%
+  \par\vspace{1.5em}
+  \noindent\sectionscorebox\hspace{6mm}%
+  \raisebox{2mm}{\adobehei\fontsize{14}{18}\selectfont #1}\par
+  \vspace{0.35em}
+}
+
+\makeatletter
+\newcommand{\adjustlist}{%
+  \ifnum\@listdepth>0\relax
+    \advance\linewidth -\@totalleftmargin
+    \advance\linewidth -\rightmargin
+    \hsize=\linewidth
+  \fi
+}
+\makeatother
+
+\newenvironment{questions}{%
+  \begin{enumerate}[
+    label=\arabic*.,
+    leftmargin=\questionslm,
+    labelsep=0.55em,
+    itemsep=1.1em,
+    topsep=0.35em
+  ]
+  \adobesong\fontsize{12}{20}\selectfont
+}{%
+  \end{enumerate}
+}
+
+\newcommand{\fillblank}[1][20mm]{\underline{\makebox[#1]{}}}
+\newcommand{\answerline}[1][100mm]{\underline{\makebox[#1]{}}}
+\newcommand{\answerspace}[1]{\par\vspace{#1}}
+\newcommand{\choice}[4]{%
+  \par\smallskip
+  \noindent\begin{tabularx}{\linewidth}{@{}*{4}{>{\adobesong\arraybackslash}X}@{}}
+    A.\ #1 & B.\ #2 & C.\ #3 & D.\ #4
+  \end{tabularx}%
+}
