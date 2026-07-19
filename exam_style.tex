@@ -9,12 +9,12 @@
 \fi
 
 % 第二页起的基础 geometry（\restoregeometry 会恢复到此设定）
-% 文字在非首页框线内居中：框线左15mm/右9mm，文字左23mm/右17mm，各留8mm
+% 非首页框线左12mm/右9mm；正文在框线内留出约 6--7mm 左空白
 \usepackage[
   paperwidth=210mm,
   paperheight=297mm,
-  left=23mm,
-  right=17mm,
+  left=20mm,
+  right=14mm,
   top=20mm,
   bottom=30mm
 ]{geometry}
@@ -79,7 +79,7 @@
 \newcommand{\OfficialFrameLeft}{32mm}
 \newcommand{\OfficialFrameRight}{9mm}
 % 非首页左右距离
-\newcommand{\LaterFrameLeft}{25mm}
+\newcommand{\LaterFrameLeft}{12mm}
 \newcommand{\LaterFrameRight}{9mm}
 % 上下距离
 \newcommand{\OfficialFrameTop}{7mm}
@@ -252,17 +252,25 @@
 }
 \makeatother
 
-\newenvironment{questions}{%
+\newenvironment{questions}[1][]{%
   \begin{enumerate}[
     label=\arabic*.,
     leftmargin=\questionslm,
     labelsep=0.55em,
     itemsep=1.1em,
-    topsep=0.35em
+    topsep=0.35em,
+    #1
   ]
   \adobesong\fontsize{12}{20}\selectfont
 }{%
   \end{enumerate}
+}
+
+\newcommand{\switchtolaterpages}{%
+  \newpage
+  \global\laterpagestrue
+  \global\questionslm=0.8em\relax
+  \newgeometry{left=20mm, right=14mm, top=20mm, bottom=30mm}%
 }
 
 \newcommand{\fillblank}[1][20mm]{\underline{\makebox[#1]{}}}
@@ -292,4 +300,3 @@
     D.\ #4
   \end{tabularx}%
 }
-
