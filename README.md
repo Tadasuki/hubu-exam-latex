@@ -8,11 +8,11 @@
 环境工程原理试卷/
 ├── font/                  # 相关字体文件
 ├── 1.png                  # 试卷顶部的湖北大学校名标志图片
-├── exam_template.tex      # 主入口文件，负责引入各模块并进行最终编译
-├── exam_style.tex         # 排版与样式配置文件，定义页面边距、密封线、字体及排版命令
 ├── exam_configs.tex       # 考试基本信息配置，包含学年、学期、课程名、学院、专业年级等
 ├── exam_content.tex       # 试卷的具体题目内容，方便在此直接编辑题干和空格
-└── exam_template.pdf      # 编译生成的 PDF 试卷预览成品
+├── exam_style.tex         # 排版与样式配置文件，定义页面边距、密封线、字体及排版命令
+├── exam_template.pdf      # 编译生成的 PDF 试卷预览成品
+└── exam_template.tex      # 主入口文件，负责引入各模块并进行最终编译
 ```
 
 ---
